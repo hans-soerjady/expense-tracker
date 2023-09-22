@@ -10,9 +10,10 @@
 <body>
     <script>
         // declare variable
+        const dataBase = []
         class Expense {
-            constructor(id, type, nominal, note,date) {
-                this.id = id
+            constructor(type, nominal, note, date) {
+                this.id = data.length + 1
                 this.type = type
                 this.nominal = nominal
                 this.note = note
@@ -25,9 +26,17 @@
 
         const showTotal;
 
-        const showByDate;
+        const showByDate = (data, startDate, endDate) => {
+            startDate = new Date(startDate)
+            endDate = new Date(endDate)
+            let result = data.filter((value) => (value.date) > startDate && (value.date) < endDate)
+            return result
+        }
 
-        const deleteData;
+        const deleteData = (data, id) => {
+            let index = data.findIndex((value) => value.id === id)
+            data.splice(index, 1)
+        }
 
         // MENU UTAMA
         const mainMenu = prompt("MASUKKIN MENU YANG MAU DITUJU A B C D E")
@@ -43,11 +52,16 @@
                 break
             // feature show data based on 2 dates
             case "C":
+                let startDate = prompt("Masukkan tanggal mulai nya:")
+                let endDate = prompt("Masukkan tanggal terakhir nya:")
 
+                showByDate(dataBase, startDate, endDate)
                 break
             // feature delete data
             case "D":
+                let deleteId = prompt("Masukkan Id pengeluaran / pemasukkan yang di hapus: ")
 
+                deleteData(dataBase, deleteId)
                 break
             // feature exit menu
             case "E":
