@@ -20,11 +20,12 @@
         }
       }
 
+
       // declare function
       const addData = (newData) => {
         dataBase.push(newData);
       };
-
+      
       const showIncome = () => {
         let output = dataBase.filter((value) => value.type == "income");
         console.log(output);
@@ -36,7 +37,6 @@
           })
           .join("\n");
       };
-
       const showExpense = () => {
         let output = dataBase.filter((value) => value.type == "expense");
         console.log(output);
@@ -48,7 +48,7 @@
           })
           .join("\n");
       };
-      const showTotal = () => {
+            const showTotal = () => {
         let total = 0;
         for (let i = 0; i < dataBase.length; i++) {
           if (dataBase[i].type === "income") {
@@ -59,10 +59,17 @@
         }
         return total;
       };
-
-      //   const showByDate;
-
-      //   const deleteData;
+      
+            const showByDate = (data, startDate, endDate) => {
+            startDate = new Date(startDate)
+            endDate = new Date(endDate)
+            let result = data.filter((value) => (value.date) > startDate && (value.date) < endDate)
+            return result
+        }
+            const deleteData = (data, id) => {
+            let index = data.findIndex((value) => value.id === id)
+            data.splice(index, 1)
+        }
 
       // MENU UTAMA
       let exit = false;
@@ -108,12 +115,19 @@
                 break;
             }
             break;
-          // feature show data based on 2 dates
-          case "C":
+            // feature show data based on 2 dates
+            case "C":
+                let startDate = prompt("Masukkan tanggal mulai nya:")
+                let endDate = prompt("Masukkan tanggal terakhir nya:")
+
+                showByDate(dataBase, startDate, endDate)
             break;
           // feature delete data
-          case "D":
-            break;
+            case "D":
+                let deleteId = prompt("Masukkan Id pengeluaran / pemasukkan yang di hapus: ")
+
+                deleteData(dataBase, deleteId)
+                break;
           // feature exit menu
           case "E":
             exit = true;
