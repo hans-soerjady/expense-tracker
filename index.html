@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
 
-  <body>
-    <script>
-      // declare variable
-      const dataBase = [];
-      class Expense {
-        constructor(type, nominal, note, date) {
-          this.id = Math.round(Math.random() * 99999);
-          this.type = type;
-          this.nominal = nominal;
-          this.note = note;
-          this.date = new Date(date);
-        }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // declare variable
+    const dataBase = [];
+    class Expense {
+      constructor(type, nominal, note, date) {
+        this.id = Math.round(Math.random() * 99999);
+        this.type = type;
+        this.nominal = nominal;
+        this.note = note;
+        this.date = new Date(date);
       }
+    }
+
+
 
       // declare function
       const addData = (newData) => {
@@ -33,20 +36,20 @@
             return `${idx + 1}. Tipe data: ${val.type}, Nominal uang: ${
               val.nominal
             }, Tanggal: ${val.date.toDateString()}`;
-          })
-          .join("\n");
-      };
-      const showExpense = () => {
-        let output = dataBase.filter((value) => value.type == "expense");
-        console.log(output);
-        return output
-          .map((val, idx) => {
-            return `${idx + 1}. Tipe data: ${val.type}, Nominal uang: ${
-              val.nominal
+        })
+        .join("\n");
+    };
+    const showExpense = () => {
+      let output = dataBase.filter((value) => value.type == "expense");
+      console.log(output);
+      return output
+        .map((val, idx) => {
+          return `${idx + 1}. Tipe data: ${val.type}, Nominal uang: ${val.nominal
             }, Tanggal: ${val.date.toDateString()}`;
           })
           .join("\n");
       };
+    
       const showTotal = () => {
         let total = 0;
         for (let i = 0; i < dataBase.length; i++) {
@@ -58,6 +61,15 @@
         }
         return total;
       };
+      
+      const printData = (data) => {
+      let result = ""
+      data.forEach((value, index) => {
+        if (index != 0) result += "\n"
+        result += `${index + 1}. ID:${value.id}. Type ${value.type}, dengan nominal ${value.nominal}. Tanggal ${value.date.toDateString()} \nCatatan: ${value.note}`
+      });
+      return result
+    }
 
       const showByDate = (data, startDate, endDate) => {
         startDate = new Date(startDate);
@@ -67,6 +79,7 @@
         );
         return result;
       };
+    
       const deleteData = (data, id) => {
         let index = data.findIndex((value) => value.id === id);
         data.splice(index, 1);
@@ -122,30 +135,29 @@
             }
             break;
           // feature show data based on 2 dates
-          case "C":
-            let startDate = prompt("Masukkan tanggal mulai nya:");
-            let endDate = prompt("Masukkan tanggal terakhir nya:");
-
-            showByDate(dataBase, startDate, endDate);
-            break;
-          // feature delete data
-          case "D":
-            let deleteId = prompt(
-              "Masukkan Id pengeluaran / pemasukkan yang di hapus: "
-            );
-
-            deleteData(dataBase, deleteId);
-            break;
+        case "C":
+          let startDate = prompt("Masukkan tanggal mulai nya: (format: yyyy-mm-dd)")
+          let endDate = prompt("Masukkan tanggal terakhir nya: (format: yyyy-mm-dd)")
+          showByDate(dataBase, startDate, endDate)
+          alert(`Pengeluaran dari tanggal ${startDate} - ${endDate}: \n${printData(dataBase)}`)
+          
+          break;
+        // feature delete data
+        case "D":
+          let deleteId = prompt(`Masukkan id pengeluaran / pemasukkan yang di hapus: \n${printData(dataBase)}`)
+          deleteData(dataBase, deleteId)
+          alert(`Data berhasil di hapus.\n${printData(dataBase)}`)
+          break;
           // feature exit menu
           case "E":
             exit = true;
             break;
-
-          // jika tidak ada pilihan
-          default:
-            break;
-        }
+        // jika tidak ada pilihan
+        default:
+          break;
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
