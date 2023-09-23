@@ -22,17 +22,19 @@
     }
 
 
-    // declare function
-    const addData = (newData) => {
-      dataBase.push(newData);
-    };
 
-    const showIncome = () => {
-      let output = dataBase.filter((value) => value.type == "income");
-      console.log(output);
-      return output
-        .map((val, idx) => {
-          return `${idx + 1}. Tipe data: ${val.type}, Nominal uang: ${val.nominal
+      // declare function
+      const addData = (newData) => {
+        dataBase.push(newData);
+      };
+
+      const showIncome = () => {
+        let output = dataBase.filter((value) => value.type == "income");
+        console.log(output);
+        return output
+          .map((val, idx) => {
+            return `${idx + 1}. Tipe data: ${val.type}, Nominal uang: ${
+              val.nominal
             }, Tanggal: ${val.date.toDateString()}`;
         })
         .join("\n");
@@ -44,22 +46,23 @@
         .map((val, idx) => {
           return `${idx + 1}. Tipe data: ${val.type}, Nominal uang: ${val.nominal
             }, Tanggal: ${val.date.toDateString()}`;
-        })
-        .join("\n");
-    };
-    const showTotal = () => {
-      let total = 0;
-      for (let i = 0; i < dataBase.length; i++) {
-        if (dataBase[i].type === "income") {
-          total += dataBase[i].nominal;
-        } else if (dataBase[i].type === "expense") {
-          total -= dataBase[i].nominal;
-        }
-      }
-      return total;
-    };
+          })
+          .join("\n");
+      };
     
-    const printData = (data) => {
+      const showTotal = () => {
+        let total = 0;
+        for (let i = 0; i < dataBase.length; i++) {
+          if (dataBase[i].type === "income") {
+            total += dataBase[i].nominal;
+          } else if (dataBase[i].type === "expense") {
+            total -= dataBase[i].nominal;
+          }
+        }
+        return total;
+      };
+      
+      const printData = (data) => {
       let result = ""
       data.forEach((value, index) => {
         if (index != 0) result += "\n"
@@ -68,61 +71,70 @@
       return result
     }
 
-    const showByDate = (data, startDate, endDate) => {
-      startDate = new Date(startDate)
-      endDate = new Date(endDate)
-      let result = data.filter((value) => (value.date) > startDate && (value.date) < endDate)
-      return result
-    }
+      const showByDate = (data, startDate, endDate) => {
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+        let result = data.filter(
+          (value) => value.date > startDate && value.date < endDate
+        );
+        return result;
+      };
+    
+      const deleteData = (data, id) => {
+        let index = data.findIndex((value) => value.id === id);
+        data.splice(index, 1);
+      };
 
-    const deleteData = (data, id) => {
-      let index = data.findIndex((value) => value.id === id)
-      data.splice(index, 1)
-    }
+      // MENU UTAMA
+      let exit = false;
+      while (!exit) {
+        const mainMenu = prompt(
+          "Pilih Menu: \nA. Tambah data\nB. Lihat data Income, Expense, dan Total Expense\nC. Lihat data berdasarkan rentang waktu tertentu\nD. Hapus Data\nE. Keluar"
+        );
+        switch (mainMenu) {
+          // feature add data
+          case "A":
+            let type = prompt("Masukan tipe data (Income/Expense)");
+            let nominal = prompt("Masukan nominal");
+            let note = prompt("Masukan Catatan");
+            let date = prompt("Masukan tanggal data (format: yyyy-mm-dd)");
+            let obj = new Expense(type, parseInt(nominal), note, date);
+            addData(obj);
+            alert(
+              `Tipe data: ${obj.type}, Nominal uang: ${
+                obj.nominal
+              }, Tanggal: ${obj.date.toDateString()} Berhasil ditambahkan`
+            );
+            break;
+          // feature show total expense and income
+          case "B":
+            let menuB = prompt(
+              `Pilih Menu:\nA. Lihat Data Income\nB. Lihat Data Expense\nC. Lihat Semua Data\nD. Lihat Total Pengeluaran`
+            );
+            switch (menuB) {
+              case "A":
+                alert(`${showIncome()}`);
+                break;
+              case "B":
+                alert(`${showExpense()}`);
+                break;
+              case "C":
+                alert(`${printData(dataBase)}`);
+                break;
+              case "D":
+                alert(
+                  `Total pengeluaranmu selama ini : \n${showTotal()}\n${
+                    showTotal() < 0 ? "Ngirit Masbro" : ""
+                  }`
+                );
+                break;
 
-    // MENU UTAMA
-    let exit = false;
-    while (!exit) {
-      const mainMenu = prompt("MASUKKIN MENU YANG MAU DITUJU A B C D E");
-      switch (mainMenu) {
-        // feature add data
-        case "A":
-          let type = prompt("Masukan tipe data (Income/Expense)");
-          let nominal = prompt("Masukan nominal");
-          let note = prompt("Masukan Catatan");
-          let date = prompt("Masukan tanggal data (format: yyyy-mm-dd)");
-          let obj = new Expense(type, parseInt(nominal), note, date);
-          addData(obj);
-          alert(
-            `Tipe data: ${obj.type}, Nominal uang: ${obj.nominal
-            }, Tanggal: ${obj.date.toDateString()} Berhasil ditambahkan`
-          );
-          break;
-        // feature show total expense and income
-        case "B":
-          let menuB = prompt(
-            `Pilih Menu:\nA. Lihat Data Income\nB. Lihat Data Expense\nC. Lihat Total Pengeluaran`
-          );
-          switch (menuB) {
-            case "A":
-              alert(`${showIncome()}`);
-              break;
-            case "B":
-              alert(`${showExpense()}`);
-              break;
-            case "C":
-              alert(
-                `Total pengeluaranmu selama ini : \n${showTotal()}\n${showTotal() < 0 ? "Ngirit Masbro" : ""
-                }`
-              );
-              break;
-
-            default:
-              alert("Pilihan yang diinputkan tidak ada");
-              break;
-          }
-          break;
-        // feature show data based on 2 dates
+              default:
+                alert("Pilihan yang diinputkan tidak ada");
+                break;
+            }
+            break;
+          // feature show data based on 2 dates
         case "C":
           let startDate = prompt("Masukkan tanggal mulai nya: (format: yyyy-mm-dd)")
           let endDate = prompt("Masukkan tanggal terakhir nya: (format: yyyy-mm-dd)")
@@ -136,11 +148,10 @@
           deleteData(dataBase, deleteId)
           alert(`Data berhasil di hapus.\n${printData(dataBase)}`)
           break;
-        // feature exit menu
-        case "E":
-          exit = true;
-          break;
-
+          // feature exit menu
+          case "E":
+            exit = true;
+            break;
         // jika tidak ada pilihan
         default:
           break;
